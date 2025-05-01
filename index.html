@@ -31,19 +31,22 @@
 
   <!-- 🔹 CleverTap SDK Setup -->
   <script type="text/javascript">
-    var clevertap = {
-      accountId: "75W-964-547Z", // Replace with your CleverTap Account ID
-      region: "eu1"         // e.g., "in1", "us1", "sg1"
-    };
-    (function () {
-      var wzrk = document.createElement('script');
-      wzrk.type = 'text/javascript';
-      wzrk.async = true;
-      wzrk.src = 'https://d2r1yp2w7bby2u.cloudfront.net/js/clevertap.min.js';
-      var s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(wzrk, s);
-    })();
-  </script>
+  var clevertap = {
+    accountId: "75W-964-547Z", // ✅ Your actual Account ID
+    region: "eu1"              // ✅ Correct region
+  };
+  clevertap.onUserLogin = [];
+  clevertap.notifications = [];
+
+  (function () {
+    var wzrk = document.createElement('script');
+    wzrk.type = 'text/javascript';
+    wzrk.async = true;
+    wzrk.src = 'https://d2r1yp2w7bby2u.cloudfront.net/js/clevertap.min.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wzrk, s);
+  })();
+</script>
 </head>
 <body>
 
@@ -82,7 +85,7 @@
         "rejectButtonText": "No thanks",
         "okButtonColor": "#F28046",
         "askAgainTimeInSeconds": 5,
-        "serviceWorkerPath": "clevertap_sw .js", // Must be accessible in your project root
+        "serviceWorkerPath": "clevertap_sw.js", // Must be accessible in your project root
         "vapidKey": "BH-2CEh29Jqfgsca8NQLT_qvGTvIFJXhW2WovBFwd5mLSusJ-cRTVjdapTd36YV3cBZKwxmd1kFYzOfV5cphNGA"     // Replace with your generated VAPID public key
       });
 

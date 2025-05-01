@@ -1,99 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login Page</title>
-  <style>
-    body {
-      font-family: Arial;
-      background: #f2f2f2;
-      display: flex;
-      height: 100vh;
-      justify-content: center;
-      align-items: center;
-    }
-    .login-container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-    input, button {
-      margin-bottom: 10px;
-      padding: 10px;
-      width: 100%;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CleverTap Integration</title>
 
-  <!-- 🔹 CleverTap SDK Setup -->
+  <!-- CleverTap Web SDK Setup -->
   <script type="text/javascript">
-  var clevertap = {
-    accountId: "75W-964-547Z", // ✅ Your actual Account ID
-    region: "eu1"              // ✅ Correct region
-  };
-  clevertap.onUserLogin = [];
-  clevertap.notifications = [];
+    var clevertap = {
+      event: [],
+      profile: [],
+      account: [],
+      onUserLogin: [],
+      notifications: [],
+      privacy: [],
+      spa: true // Enable if using Single Page App
+    };
 
-  (function () {
-    var wzrk = document.createElement('script');
-    wzrk.type = 'text/javascript';
-    wzrk.async = true;
-    wzrk.src = 'https://d2r1yp2w7bby2u.cloudfront.net/js/clevertap.min.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(wzrk, s);
-  })();
-</script>
+    // Set your CleverTap Account ID and Region
+    clevertap.account.push({ "id": "75W-964-547Z" }, "eu1");
+
+    // Privacy configurations
+    clevertap.privacy.push({ optOut: false }); // Set to true if user opts out
+    clevertap.privacy.push({ useIP: false });  // Set to true to collect IP
+
+    // Load the CleverTap script
+    (function () {
+      var wzrk = document.createElement('script');
+      wzrk.type = 'text/javascript';
+      wzrk.async = true;
+      wzrk.src = ('https:' === document.location.protocol ?
+        'https://d2r1yp2w7bby2u.cloudfront.net' :
+        'http://static.clevertap.com') + '/js/clevertap.min.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wzrk, s);
+    })();
+  </script>
 </head>
+
 <body>
+  <h1>Welcome to My CleverTap Demo Page</h1>
+  <button onclick="loginUser()">Login User</button>
+  <button onclick="trackEvent()">Track Product View</button>
+  <button onclick="askNotificationPermission()">Enable Web Push</button>
 
-<div class="login-container">
-  <h2>Login</h2>
-  <form onsubmit="return handleLogin(event)">
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button type="submit">Login</button>
-    <p id="message" style="color: green;"></p>
-  </form>
-</div>
-
-<!-- 🔹 Push Notification Prompt -->
-<script type="text/javascript">
-  function handleLogin(event) {
-    event.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    if (email && password) {
-      document.getElementById("message").textContent = "Login Successful!";
-
-      // Optionally, you can identify the user in CleverTap
+  <script>
+    // Simulate user login
+    function loginUser() {
       clevertap.onUserLogin.push({
         "Site": {
-          "Email": email
+          "Name": "John Doe",
+          "Identity": "user_12345",
+          "Email": "john@example.com",
+          "Phone": "+14155551234",
+          "Gender": "M",
+          "DOB": new Date("1990-01-01"),
+          "MSG-email": true,
+          "MSG-push": true,
+          "MSG-sms": true,
+          "MSG-whatsapp": false
         }
       });
 
-      // Ask for Push Notification Permission
-      clevertap.notifications.push({
-        "titleText": "Would you like to receive Push Notifications?",
-        "bodyText": "We promise to only send you relevant content and give you updates on your transactions",
-        "okButtonText": "Sign me up!",
-        "rejectButtonText": "No thanks",
-        "okButtonColor": "#F28046",
-        "askAgainTimeInSeconds": 5,
-        "serviceWorkerPath": "clevertap_sw.js", // Must be accessible in your project root
-        "vapidKey": "BH-2CEh29Jqfgsca8NQLT_qvGTvIFJXhW2WovBFwd5mLSusJ-cRTVjdapTd36YV3cBZKwxmd1kFYzOfV5cphNGA"     // Replace with your generated VAPID public key
+      alert("User logged in and identified.");
+    }
+
+    // Track an event
+    function trackEvent() {
+      clevertap.event.push("Product Viewed", {
+        "Product name": "Casio Chronograph Watch",
+        "Category": "Mens Accessories",
+        "Price": 59.99,
+        "Date": new Date()
       });
 
-    } else {
-      document.getElementById("message").textContent = "Please enter valid credentials.";
+      alert("Product Viewed event sent.");
     }
-  }
-</script>
 
+    // Ask for push notification permission
+    function askNotificationPermission() {
+      clevertap.notifications.push({
+        "titleText": "Would you like to receive Push Notifications?",
+        "bodyText": "We promise to only send you relevant content.",
+        "okButtonText": "Yes, Notify Me!",
+        "rejectButtonText": "No, Thanks",
+        "okButtonColor": "#F28046",
+        "askAgainTimeInSeconds": 5,
+        "serviceWorkerPath": "clevertap_sw.js",
+        "vapidKey": "BH-2CEh29Jqfgsca8NQLT_qvGTvIFJXhW2WovBFwd5mLSusJ-cRTVjdapTd36YV3cBZKwxmd1kFYzOfV5cphNGA"
+      });
+    }
+  </script>
 </body>
 </html>

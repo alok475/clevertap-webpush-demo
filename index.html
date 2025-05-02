@@ -14,17 +14,13 @@
       onUserLogin: [],
       notifications: [],
       privacy: [],
-      spa: true // Enable if using Single Page App
+      spa: true
     };
 
-    // Set your CleverTap Account ID and Region
     clevertap.account.push({ "id": "75W-964-547Z" }, "eu1");
+    clevertap.privacy.push({ optOut: false });
+    clevertap.privacy.push({ useIP: false });
 
-    // Privacy configurations
-    clevertap.privacy.push({ optOut: false }); // Set to true if user opts out
-    clevertap.privacy.push({ useIP: false });  // Set to true to collect IP
-
-    // Load the CleverTap script
     (function () {
       var wzrk = document.createElement('script');
       wzrk.type = 'text/javascript';
@@ -40,32 +36,44 @@
 
 <body>
   <h1>Welcome to My CleverTap Demo Page</h1>
-  <button onclick="loginUser()">Login User</button>
+
+  <!-- Dynamic User Input Form -->
+  <h2>Login</h2>
+  <form id="userForm">
+    <label>Name: <input type="text" id="name" required></label><br><br>
+    <label>Email: <input type="email" id="email" required></label><br><br>
+    <label>Phone: <input type="tel" id="phone" placeholder="+14155551234"></label><br><br>
+    <button type="submit">Login User</button>
+  </form>
+
+  <br>
   <button onclick="trackEvent()">Track Product View</button>
   <button onclick="askNotificationPermission()">Enable Web Push</button>
 
   <script>
-    // Simulate user login
-    function loginUser() {
+    // Dynamic user login based on form input
+    document.getElementById("userForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
       clevertap.onUserLogin.push({
         "Site": {
-          "Name": "John Doe",
-          "Identity": "user_12345",
-          "Email": "john@example.com",
-          "Phone": "+14155551234",
-          "Gender": "M",
-          "DOB": new Date("1990-01-01"),
+          "Name": name,
+          "Identity": email,
+          "Email": email,
+          "Phone": phone,
           "MSG-email": true,
           "MSG-push": true,
-          "MSG-sms": true,
-          "MSG-whatsapp": false
+          "MSG-sms": true
         }
       });
 
-      alert("User logged in and identified.");
-    }
+      alert("User logged in with entered details.");
+    });
 
-    // Track an event
+    // Track a custom event
     function trackEvent() {
       clevertap.event.push("Product Viewed", {
         "Product name": "Casio Chronograph Watch",
@@ -73,11 +81,10 @@
         "Price": 59.99,
         "Date": new Date()
       });
-
       alert("Product Viewed event sent.");
     }
 
-    // Ask for push notification permission
+    // Ask permission for Web Push Notifications
     function askNotificationPermission() {
       clevertap.notifications.push({
         "titleText": "Would you like to receive Push Notifications?",

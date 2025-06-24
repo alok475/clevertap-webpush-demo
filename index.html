@@ -17,7 +17,6 @@
       spa: true
     };
 
-    // ✅ YOUR Account ID
     clevertap.account.push({ "id": "KZ7-99W-W57Z" }, "eu1");
     clevertap.privacy.push({ optOut: false });
     clevertap.privacy.push({ useIP: false });
@@ -38,6 +37,7 @@
 <body>
   <h1>Welcome to My CleverTap Demo Page</h1>
 
+  <!-- Dynamic User Input Form -->
   <h2>Login</h2>
   <form id="userForm">
     <label>Name: <input type="text" id="name" required></label><br><br>
@@ -51,6 +51,7 @@
   <button onclick="askNotificationPermission()">Enable Web Push</button>
 
   <script>
+    // Dynamic user login based on form input
     document.getElementById("userForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const name = document.getElementById("name").value.trim();
@@ -72,6 +73,7 @@
       alert("User logged in with entered details.");
     });
 
+    // Track a custom event
     function trackEvent() {
       clevertap.event.push("Product Viewed", {
         "Product name": "Casio Chronograph Watch",
@@ -82,6 +84,7 @@
       alert("Product Viewed event sent.");
     }
 
+    // Ask permission for Web Push Notifications
     function askNotificationPermission() {
       clevertap.notifications.push({
         "titleText": "Would you like to receive Push Notifications?",
@@ -91,7 +94,7 @@
         "okButtonColor": "#F28046",
         "askAgainTimeInSeconds": 5,
         "serviceWorkerPath": "clevertap_sw.js",
-        "vapidKey": "BH-2CEh29Jqfgsca8NQLT_qvGTvIFJXhW2WovBFwd5mLSusJ-cRTVjdapTd36YV3cBZKwxmd1kFYzOfV5cphNGA"
+        "vapidKey": "BHiz-pXnvdj_iFkw8R3lanGC4kZfsDPYCDuwUEm0pUyfNw6yiqpsmA6FW_xzgbKLFS70eYpyb8ioMdTxGhwKN7s"
       });
     }
   </script>
